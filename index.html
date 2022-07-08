@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="CSS/styles.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Quiz 4 Quick</title>
+  </head>
+  <body>
+    <form class="container">
+      <main>
+        <div class="game-logo">
+          <div class="logo-container">
+            <img src="./imgs/game-icon.png" alt="game-logo" />
+          </div>
+          <h1>QUICK 4 QUIZZ</h1>
+        </div>
+        <div class="start-btn-container">
+          <button onclick="startGame()">MULAI</button>
+        </div>
+      </main>
+    </form>
+  </body>
+</html>
+<script>
+  const catchForm = document.querySelector(".container");
+  let qN = 0;
+  let qNumb = 0;
+  let totalScore = 0;
+  let scoreContainer = [];
+  let quizzTimer;
+  const setAnswer = (isCorrect) => {
+    isCorrect
+      ? scoreContainer.splice(qN, 1, 100 / scoreContainer.length)
+      : scoreContainer.splice(qN, 1, 0);
+  };
+  let quizzDatas = [
+    {
+      quizz: `<span
+              >Di bawah ini manakah gambar struktur atom menurut Rutherford</span
+            >
+            <div class="choices-container">
+              <div class="choice-btn-wrapper" onclick="setAnswer(true)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="../imgs/quizz-assets/atom1.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+              <div class="choice-btn-wrapper" onclick="setAnswer(false)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="../imgs/quizz-assets/atom2.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+              <div class="choice-btn-wrapper" onclick="setAnswer(false)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="../imgs/quizz-assets/atom3.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+            </div>`,
+      quizzNumber: "01",
+    },
+    {
+      quizz: `<span
+              >
+              Yang termasuk kedalam hewan mamalia adalah 
+              </span
+            >
+            <div class="choices-container">
+              <div class="choice-btn-wrapper" onclick="setAnswer(false)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="../imgs/quizz-assets/mamalia1.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+              <div class="choice-btn-wrapper" onclick="setAnswer(true)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="../imgs/quizz-assets/mamalia2.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+              <div class="choice-btn-wrapper" onclick="setAnswer(false)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="../imgs/quizz-assets/mamalia3.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+            </div>`,
+      quizzNumber: "02",
+    },
+    {
+      quizz: `<span
+              >
+             Contoh Sistem operasi berbasis GUI,kecuali... 
+              </span
+            >
+            <div class="choices-container">
+              <div class="choice-btn-wrapper" onclick="setAnswer(false)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="imgs/quizz-assets/ubuntu.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+              <div class="choice-btn-wrapper" onclick="setAnswer(true)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="imgs/quizz-assets/unix.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+              <div class="choice-btn-wrapper" onclick="setAnswer(false)">
+                <input type="radio" name="choice" />
+                <div class="choice-btn">
+                  <div class="choice-img-container">
+                    <img src="imgs/quizz-assets/windows.png" alt="choice-img" />
+                  </div>
+                </div>
+              </div>
+            </div>`,
+      quizzNumber: "03",
+    },
+  ];
+  quizzDatas.map(() => {
+    scoreContainer.push(0);
+  });
+  catchForm.addEventListener("submit", (e) => {
+    // e.preventDefault();
+  });
+  const finishQuizz = () => {
+    const renderPopup = document.querySelector("#render-popup");
+    scoreContainer.map((individualScore) => {
+      totalScore += individualScore;
+    });
+    Math.round(totalScore) == 99
+      ? (totalScore = 100)
+      : (totalScore = Math.round(totalScore));
+    console.log(totalScore);
+    renderPopup.innerHTML = `
+      <div class="popup-scores-container">
+        <div class="popup-scores">
+          <h1 class="score-heading">SCORE</h1>
+          <div class="scores-total">${totalScore}</div>
+        </div>
+      </div>`;
+
+    renderPopup.setAttribute("style", "display:block");
+    clearTimeout(quizzTimer);
+  };
+  const startGame = () => {
+    const newContainer = document.createElement("form");
+    const quizzContainer = document.createElement("main");
+    newContainer.className = "container";
+    quizzContainer.innerHTML = `<div class="quizz-container">
+          <header>
+            <h1>QUIZZ</h1>
+            <h1 class="quizz-number">01</h1>
+            <span class="timer-view"></span>
+          </header>
+          <div class="quizz-main">
+            ${quizzDatas[qN].quizz}
+          </div>
+          <footer>
+            <nav id="switch-q-btn-left" style="pointer-events:none;" onClick="swtichQuizz(false)">
+              <i class="bx bx-left-arrow-alt"></i>
+            </nav>
+            <nav id="switch-q-btn-right" onClick="swtichQuizz(true)">
+              <i class="bx bx-right-arrow-alt"></i>
+            </nav>
+          </footer>
+        </div>
+      <span id="render-popup"></span>`;
+    // quizzContainer.appendChild(document.createTextNode("awokawok"));
+    newContainer.appendChild(quizzContainer);
+    catchForm.replaceWith(newContainer);
+    // console.log(3 * 60 * 1000);
+    quizzTimer = setTimeout(() => finishQuizz(), 3 * 60 * 1000);
+  };
+  let quizzNumberEl;
+  const disableSwitchQuizz = (btn) => {
+    const switchQBtn = document.querySelector(`#switch-q-btn-${btn}`);
+    switchQBtn.setAttribute("style", "pointer-events:none;");
+    console.log(switchQBtn);
+  };
+  const enableSwitchQuizz = (btn) => {
+    const switchQBtn = document.querySelector(`#switch-q-btn-${btn}`);
+    switchQBtn.removeAttribute("style");
+    console.log(switchQBtn);
+  };
+
+  const showFinishBtn = () => {
+    const switchQBtn = document.querySelector(`#switch-q-btn-right`);
+    const finishBtn = document.createElement("span");
+    finishBtn.setAttribute("onClick", "finishQuizz()");
+    finishBtn.setAttribute("class", "finish-btn");
+    // finishBtn.setAttribute("type", "submit");
+    finishBtn.innerText = "FINISH";
+    switchQBtn.replaceWith(finishBtn);
+  };
+  const hideFinishBtn = () => {
+    const finishBtn = document.querySelector(".finish-btn");
+    const nextBtn = document.createElement("nav");
+    nextBtn.setAttribute("onClick", "swtichQuizz(true)");
+    nextBtn.setAttribute("id", "switch-q-btn-right");
+    nextBtn.innerHTML = `<i class="bx bx-right-arrow-alt"></i>`;
+    finishBtn.replaceWith(nextBtn);
+  };
+  const loadQuiz = (next) => {
+    if ((qN >= 0 && qN < quizzDatas.length) || qN < quizzDatas.length) {
+      next ? qN++ : qN--;
+      const quizzMain = document.querySelector(".quizz-main");
+      const newQuizz = document.createElement("div");
+      newQuizz.className = "quizz-main";
+      quizzMain.appendChild(newQuizz);
+      quizzNumberEl = document.querySelector(".quizz-number");
+      quizzNumberEl.replaceChildren(quizzDatas[qN].quizzNumber);
+      newQuizz.replaceWith((newQuizz.innerHTML = quizzDatas[qN].quizz));
+      quizzMain.replaceWith(newQuizz);
+      console.log(qN);
+    }
+    // disableSwitchQuizz("right");
+    console.log({ qN });
+    if (quizzDatas.length > qN && next == false) {
+      hideFinishBtn();
+    }
+    if (qN == 0) {
+      disableSwitchQuizz("left");
+      enableSwitchQuizz("right");
+      // if (qN > 0 && qN == quizzDatas.length - 1) {
+      // }
+    } else if (qN > 0 && qN == quizzDatas.length - 1) {
+      // disableSwitchQuizz("right");
+      enableSwitchQuizz("left");
+      showFinishBtn();
+    }
+  };
+  const swtichQuizz = (next) => {
+    loadQuiz(next);
+  };
+</script>
